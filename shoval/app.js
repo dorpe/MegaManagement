@@ -9,9 +9,10 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var mongoose   = require('mongoose');
 var mongodb = require('mongodb');
-var monk = require('monk');
-var db = monk('10.17.1.13/local');
+var db = require('monk')('10.17.1.13/local');
 var app = express();
+
+var Matzevot = db.get('Matzeva');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -75,31 +76,17 @@ routes.get('/userList', function(req, res){
 });
 
 routes.get('/openMatzevot', function(req, res){
-    var db = req.db;
-    var openMatzevot = db.get('Matzeva');
-    openMatzevot.find({"status": "open"},{},function(e, docs){
+    var openMatzevot = Matzevot.find({"status": "open"},{},function(e, docs){
       res.send(docs);
       db.close;
     });
 });
 
 routes.get('/CloseMatzevot', function(req, res){
-    var db = req.db;
-    var openMatzevot = db.get('Matzeva');
-    openMatzevot.find({"status": "closed"},{},function(e, docs){
+     var closedMatzevot = Matzevot.find({"status": "closed"},{},function(e, docs){
       res.send(docs);
       db.close;
     });
-});
-
-routes.put('/openMatzevot/:id', function (req, res){
-    var db = req.db;
-    var openMatzevot = db.get('Matzeva');
-    openMatzevot.find({"status": "open"},{},function(e, docs){
-     docs[0].status = "closed";
-     openMatzevot.save();
-     db.close;
-    })
 });
 
 routes.get('/missingPeople', function(req, res){
