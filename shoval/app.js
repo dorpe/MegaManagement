@@ -72,6 +72,7 @@ routes.get('/userList', function(req, res){
     var collection = db.get('Users');
     collection.find({},{},function(e, docs){
       res.send(docs);
+      db.close;
     });
 });
 
@@ -80,6 +81,20 @@ routes.get('/openMatzevot', function(req, res){
     var openMatzevot = db.get('Matzeva');
     openMatzevot.find({"status": "open"},{},function(e, docs){
       res.send(docs);
+      db.close;
+    });
+});
+
+routes.get('/missingPeople', function(req, res){
+    var date1 = new Date();
+    var date2 = new Date(2010, 0, 1, 0, 0, 0, 0); // 2010
+    var between = date1.getTime() - date2.getTime();
+
+    var db = req.db;
+    var openMatzevot = db.get('Matzeva');
+    openMatzevot.find({},{},function(e, docs){
+      res.send(between);
+      db.close;
     });
 });
 
