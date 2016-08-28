@@ -90,9 +90,7 @@ routes.get('/CloseMatzevot', function(req, res){
     });
 });
 
-<<<<<<< HEAD
-routes.get('/getMatzevaStatus', function(req, res){
-=======
+
 routes.post('/changestatus', function(req, res){
       Matzevot.update({"_id": req.body.id} ,{$set:{"status" : "closed"}});
       db.close;
@@ -103,7 +101,8 @@ routes.get('/missingPeople', function(req, res){
     moreFiveMinuets.setMinutes(moreFiveMinuets.getMinutes() - 5);
     moreFiveMinuets.setHours(moreFiveMinuets.getHours() + 3);
 
->>>>>>> 7389623bfbd244185bcdf928a875d92d8506a391
+    
+routes.get('/getMatzevaStatus', function(req, res){
     var db = req.db;
     var missingPeople = db.get('Matzeva');
     var allUsers = db.get('User').find();
