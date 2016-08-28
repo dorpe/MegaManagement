@@ -135,6 +135,38 @@ routes.post('/openMatzevot', function(req, res){
    });
 });
 
+routes.post('/createClass', function(req, res){
+    var db = req.db;
+    var classOrderID = req.body.classcOrderID;
+    var classOrderDate = req.body.classOrderDate;
+    var classOrderBeginningHour = req.body.classOrderBeginningHour;
+    var classOrderEndHour = req.body.classOrderEndHour;
+    var classOrderStudentsAmount = req.body.classOrderStudentsAmount;
+    var classOrderComputersDemand = req.body.classOrderComputersDemand;
+    var classOrderSpecialGuest = req.body.classOrderSpecialGuest;
+
+    db.collection('Classes').update(
+    { "_id": classcOrderID},
+    { "$push": 
+        { "Date" : classOrderDate,
+          "BeginningHour" : classOrderBeginningHour,
+          "EndHour" : classOrderEndHour,
+          "StudentsAmount" : classOrderStudentsAmount,
+          "ComputersDemand" : classOrderComputersDemand,
+          "SpecialGuest" : classOrderSpecialGuest
+        }
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            // And forward to success page
+            res.send("all good!");
+        }
+   });
+});
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
