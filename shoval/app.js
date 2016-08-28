@@ -67,6 +67,8 @@ app.use(function(err, req, res, next) {
 });
 
 
+
+
 routes.get('/userList', function(req, res){
     var db = req.db;
     var collection = db.get('Users');
@@ -95,12 +97,6 @@ routes.post('/changestatus', function(req, res){
       Matzevot.update({"_id": req.body.id} ,{$set:{"status" : "closed"}});
       db.close;
 });
-
-routes.get('/missingPeople', function(req, res){
-    var moreFiveMinuets = new Date();
-    moreFiveMinuets.setMinutes(moreFiveMinuets.getMinutes() - 5);
-    moreFiveMinuets.setHours(moreFiveMinuets.getHours() + 3);
-
     
 routes.get('/getMatzevaStatus', function(req, res){
     var db = req.db;
