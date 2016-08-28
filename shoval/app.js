@@ -134,7 +134,7 @@ routes.post('/UserStatusinMatzeva', function(req, res){
         }     
     });
 
-    res.send(docs);
+    res.send("ok");
     db.close;
 });
 
@@ -154,7 +154,7 @@ routes.post('/CreateMatzeva', function(req, res){
         "status" : "open"
     });
     
-    res.send(docs);
+    res.send("ok");
     db.close;
 });
 
