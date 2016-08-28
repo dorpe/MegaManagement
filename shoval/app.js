@@ -89,6 +89,11 @@ routes.get('/CloseMatzevot', function(req, res){
     });
 });
 
+routes.post('/changestatus/:id', function(req, res){
+      Matzevot.update({"_id": req.params.id},{"status" : "closed"});
+      db.close;
+});
+
 routes.get('/missingPeople', function(req, res){
     var moreFiveMinuets = new Date();
     moreFiveMinuets.setMinutes(moreFiveMinuets.getMinutes() - 5);
