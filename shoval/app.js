@@ -93,8 +93,15 @@ routes.get('/missingPeople', function(req, res){
     var db = req.db;
     var missingPeople = db.get('Matzeva');
     missingPeople.find({"status" : "open", "time" : { $gte : moreFiveMinuets} },{},function(e, docs){
-      
-      res.send(docs);
+      docs.forEach(function(currMatzeva) {
+        // list of the users that answers
+        var Answered = currMatzeva["answered"];
+        Answered.forEach(function(currUser){
+          console.log(currUser["user"]);
+          //list.add(currUser["user"]);
+        });
+      });
+      res.send("a");
       db.close;
     });
 });
