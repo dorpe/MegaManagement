@@ -92,6 +92,7 @@ routes.get('/CloseMatzevot', function(req, res){
     });
 });
 
+
 routes.post('/changestatus', function(req, res){
       Matzevot.update({"_id": req.body.id} ,{$set:{"status" : "closed"}});
       db.close;
@@ -102,23 +103,26 @@ routes.get('/missingPeople', function(req, res){
     moreFiveMinuets.setMinutes(moreFiveMinuets.getMinutes() - 5);
     moreFiveMinuets.setHours(moreFiveMinuets.getHours() + 3);
 
+    
+routes.get('/getMatzevaStatus', function(req, res){
     var db = req.db;
     var missingPeople = db.get('Matzeva');
-    missingPeople.find({"status" : "open", "time" : { $gte : moreFiveMinuets} },{},function(e, docs){
-      docs.forEach(function(currMatzeva) {
-        // list of the users that answers
-        var Answered = currMatzeva["answered"];
-        Answered.forEach(function(currUser){
+    var allUsers = db.get('User').find();
+    missingPeople.find({"status" : "open"},{},function(e, docs){
+          docs.forEach(function(currMatzeva) {
+          var Answered = currMatzeva["answered"];
+          console.log(Answered);
+          Answered.forEach(function(currUser){
           console.log(currUser["user"]);
-          //list.add(currUser["user"]);
         });
       });
-      res.send("a");
+
+       });
+      res.send("aa");
       db.close;
-    });
 });
 
-routes.post('/openMatzevot', function(req, res){
+routes.post('/UserStatusinMatzeva', function(req, res){
     var db = req.db;
     var userID = req.body.userID;
     var userStatus = req.body.userStatus;
@@ -133,17 +137,31 @@ routes.post('/openMatzevot', function(req, res){
                 "status": userStatus,
                 "time_answered" : new Date()
             }
-        }
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
-        }
-        else {
-            // And forward to success page
-            res.send("all good!");
-        }
-   });
+        }     
+    });
+
+    res.send(docs);
+    db.close;
+});
+
+routes.post('/CreateMatzeva', function(req, res){
+    var db = req.db;
+    var place = req.body.place;
+    var time = req.body.time;
+    var name = req.body.name;
+    var maker = req.body.maker;
+
+    db.collection('Matzeva').insert(
+    { 
+        "name" : name,
+        "maker" : maker,
+        "time" : time,
+        "place" : place,        
+        "status" : "open"
+    });
+    
+    res.send(docs);
+    db.close;
 });
 
 app.listen(3000, function () {
