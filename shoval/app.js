@@ -103,14 +103,15 @@ routes.put('/openMatzevot/:id', function (req, res){
 });
 
 routes.get('/missingPeople', function(req, res){
-    var date1 = new Date();
-    var date2 = new Date(2010, 0, 1, 0, 0, 0, 0); // 2010
-    var between = date1.getTime() - date2.getTime();
+    var moreFiveMinuets = new Date();
+    moreFiveMinuets.setMinutes(moreFiveMinuets.getMinutes() - 5);
+    moreFiveMinuets.setHours(moreFiveMinuets.getHours() + 3);
 
     var db = req.db;
-    var openMatzevot = db.get('Matzeva');
-    openMatzevot.find({},{},function(e, docs){
-      res.send(between);
+    var missingPeople = db.get('Matzeva');
+    missingPeople.find({"status" : "open", "time" : { $gte : moreFiveMinuets} },{},function(e, docs){
+      
+      res.send(docs);
       db.close;
     });
 });
@@ -121,3 +122,5 @@ app.listen(3000, function () {
 });
 
 module.exports = app;
+
+
