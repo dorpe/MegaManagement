@@ -7,12 +7,10 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
-var mongoose = require('mongoose');
+var mongoose   = require('mongoose');
 var mongodb = require('mongodb');
 var monk = require('monk');
 var db = monk('10.17.1.13/local');
-
 var app = express();
 
 // view engine setup
@@ -85,6 +83,25 @@ routes.get('/openMatzevot', function(req, res){
     });
 });
 
+routes.get('/CloseMatzevot', function(req, res){
+    var db = req.db;
+    var openMatzevot = db.get('Matzeva');
+    openMatzevot.find({"status": "closed"},{},function(e, docs){
+      res.send(docs);
+      db.close;
+    });
+});
+
+routes.put('/openMatzevot/:id', function (req, res){
+    var db = req.db;
+    var openMatzevot = db.get('Matzeva');
+    openMatzevot.find({"status": "open"},{},function(e, docs){
+     docs[0].status = "closed";
+     openMatzevot.save();
+     db.close;
+    })
+});
+
 routes.get('/missingPeople', function(req, res){
     var date1 = new Date();
     var date2 = new Date(2010, 0, 1, 0, 0, 0, 0); // 2010
@@ -97,6 +114,7 @@ routes.get('/missingPeople', function(req, res){
       db.close;
     });
 });
+
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
