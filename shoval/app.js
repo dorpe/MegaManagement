@@ -100,7 +100,7 @@ routes.get('/missingPeople', function(req, res){
     });
 });
 
-routes.post('/openMatzevot', function(req, res){
+routes.post('/UserStatusMatzeva', function(req, res){
     var db = req.db;
     var userID = req.body.userID;
     var userStatus = req.body.userStatus;
