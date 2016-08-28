@@ -9,6 +9,9 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var mongoose = require('mongoose');
+var mongodb = require('mongodb');
+var monk = require('monk');
+var db = monk('10.17.1.13/local');
 
 var app = express();
 
@@ -23,6 +26,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next){
+  req.db = db;
+  next();
+});
 
 app.use('/', routes);
 app.use('/users', users);
@@ -59,8 +67,23 @@ app.use(function(err, req, res, next) {
 });
 
 
+routes.get('/userList', function(req, res){
+    var db = req.db;
+    var collection = db.get('Users');
+    collection.find({},{},function(e, docs){
+      res.send(docs);
+    });
+});
+
+routes.get('/openMatzevot', function(req, res){
+    var db = req.db;
+    var openMatzevot = db.get('Matzeva');
+    openMatzevot.find({"status": "open"},{},function(e, docs){
+      res.send(docs);
+    });
+});
+
 app.listen(3000, function () {
-  mongoose.connect('mongodb://10.17.1.13/local')
   console.log('Example app listening on port 3000!');
 });
 
