@@ -60,7 +60,7 @@ app.use(function(err, req, res, next) {
 
 
 app.listen(3000, function () {
-  //mongoose.connect('mongodb://10.17.1.13/local')
+  mongoose.connect('mongodb://10.17.1.13/local')
   console.log('Example app listening on port 3000!');
 });
 
