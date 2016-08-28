@@ -90,8 +90,8 @@ routes.get('/CloseMatzevot', function(req, res){
     });
 });
 
-routes.post('/changestatus/:id', function(req, res){
-      Matzevot.update({"_id": req.params.id},{"status" : "closed"});
+routes.post('/changestatus', function(req, res){
+      Matzevot.update({"_id": req.body.id} ,{$set:{"status" : "closed"}});
       db.close;
 });
 
@@ -109,8 +109,6 @@ routes.get('/missingPeople', function(req, res){
     });
 });
 
-<<<<<<< HEAD
-=======
 routes.post('/openMatzevot', function(req, res){
     var db = req.db;
     var userID = req.body.userID;
@@ -138,7 +136,6 @@ routes.post('/openMatzevot', function(req, res){
         }
    });
 });
->>>>>>> 7057af4703830f987d4bc38d211198d0cdb4fb45
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
