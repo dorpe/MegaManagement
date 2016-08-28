@@ -73,6 +73,7 @@ routes.get('/userList', function(req, res){
     var collection = db.get('Users');
     collection.find({},{},function(e, docs){
       res.send(docs);
+      db.close;
     });
 });
 
@@ -81,6 +82,21 @@ routes.get('/openMatzevot', function(req, res){
     var openMatzevot = db.get('Matzeva');
     openMatzevot.find({"status": "open"},{},function(e, docs){
       res.send(docs);
+      db.close;
+    });
+});
+
+routes.get('/missingPeople', function(req, res){
+    var moreFiveMinuets = new Date();
+    moreFiveMinuets.setMinutes(moreFiveMinuets.getMinutes() - 5);
+    moreFiveMinuets.setHours(moreFiveMinuets.getHours() + 3);
+
+    var db = req.db;
+    var missingPeople = db.get('Matzeva');
+    missingPeople.find({"status" : "open", "time" : { $gte : moreFiveMinuets} },{},function(e, docs){
+      
+      res.send(docs);
+      db.close;
     });
 });
 
@@ -117,3 +133,5 @@ app.listen(3000, function () {
 });
 
 module.exports = app;
+
+
