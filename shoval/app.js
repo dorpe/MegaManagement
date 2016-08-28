@@ -27,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use(function(req, res, next){
   req.db = db;
   next();
@@ -104,6 +105,34 @@ routes.get('/missingPeople', function(req, res){
       res.send("a");
       db.close;
     });
+});
+
+routes.post('/openMatzevot', function(req, res){
+    var db = req.db;
+    var userID = req.body.userID;
+    var userStatus = req.body.userStatus;
+    var matzevaID = req.body.matzevaID;
+
+    db.collection('Matzeva').update(
+    { "_id": matzevaID},
+    { "$push": 
+        {"answered": 
+            {
+                "user": userID,
+                "status": userStatus,
+                "time_answered" : new Date()
+            }
+        }
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            // And forward to success page
+            res.send("all good!");
+        }
+   });
 });
 
 app.listen(3000, function () {
