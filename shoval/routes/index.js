@@ -6,8 +6,9 @@ router.get('/', function(req, res, next) {
   res.send('Hello World');
 });
 
-router.get('/moshe', function (req, res) {
-  res.send('Hello moshe!');
+router.get('/Dor', function (req, res) {
+  res.send('Hello Dor!');
 });
+
 
 module.exports = router;
